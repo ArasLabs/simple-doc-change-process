@@ -59,14 +59,13 @@
    <Item type="Property" id="9D106049C5484BADBBBF23A93F28AD6C" action="add">
     <column_alignment>left</column_alignment>
     <column_width>300</column_width>
-    <data_type>string</data_type>
+    <data_type>ml_string</data_type>
     <is_hidden>0</is_hidden>
     <is_hidden2>0</is_hidden2>
     <is_indexed>0</is_indexed>
     <is_keyed>0</is_keyed>
     <is_multi_valued>0</is_multi_valued>
     <is_required>0</is_required>
-    <keyed_name_order>2</keyed_name_order>
     <label xml:lang="en">Doc Change Title</label>
     <name>doc_change_title</name>
     <range_inclusive>0</range_inclusive>

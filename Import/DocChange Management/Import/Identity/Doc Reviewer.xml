@@ -1,0 +1,22 @@
+﻿<AML>
+ <Item type="Identity" id="0178AE37B4AA4E9EBDBD4FE1FBEA70FF" action="add">
+  <description>dummy used in Doc Approvers/Reviewers - replace with real users</description>
+  <is_alias>1</is_alias>
+  <name>Doc Reviewer</name>
+  </Item>
+ <Item type="Member" id="19EB411C703D40F1AD3CCCC586DA7498" action="add">
+  <related_id keyed_name="Bill Designer" type="Identity">82CBFA8F7627474E8E7B271F53B6DFB3</related_id>
+  <sort_order>128</sort_order>
+  <source_id keyed_name="Doc Reviewer" type="Identity">0178AE37B4AA4E9EBDBD4FE1FBEA70FF</source_id>
+ </Item>
+ <Item type="Member" id="58AD071598C94910A982F330E98C540E" action="add">
+  <related_id keyed_name="Greg Manager" type="Identity">F5CE28536D0C404C8944A0B4357C4D19</related_id>
+  <sort_order>256</sort_order>
+  <source_id keyed_name="Doc Reviewer" type="Identity">0178AE37B4AA4E9EBDBD4FE1FBEA70FF</source_id>
+ </Item>
+ <Item type="Member" id="7431D92D12A146C19EA01B90EE115454" action="add">
+  <related_id keyed_name="Peter Planner" type="Identity">5635085EDFA946E0B6F249ED8C88C350</related_id>
+  <sort_order>384</sort_order>
+  <source_id keyed_name="Doc Reviewer" type="Identity">0178AE37B4AA4E9EBDBD4FE1FBEA70FF</source_id>
+ </Item>
+</AML>

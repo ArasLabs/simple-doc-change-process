@@ -1,0 +1,11 @@
+﻿<AML>
+ <Item type="Identity" id="65AF39816BC443C7B322E797906237AF" action="add">
+  <is_alias>0</is_alias>
+  <name>Doc Reviewers</name>
+  </Item>
+ <Item type="Member" id="AF1C4EC514574D1282F4783F56ADB510" action="add">
+  <related_id keyed_name="Doc Reviewer" type="Identity">0178AE37B4AA4E9EBDBD4FE1FBEA70FF</related_id>
+  <sort_order>128</sort_order>
+  <source_id keyed_name="Doc Reviewers" type="Identity">65AF39816BC443C7B322E797906237AF</source_id>
+ </Item>
+</AML>

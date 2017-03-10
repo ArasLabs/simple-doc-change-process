@@ -39,11 +39,24 @@ Else If (aff_docs_count < 0)
   Return thisErr
 End If
 
+Dim thisAffItem As Aras.IOM.Item
+
+' apply some check on affeced document and abort if necessary
+For i = 0 To aff_docs_count - 1
+  thisAffItem = affRels.getItemByIndex(i)
+  
+  ' none of the affected documents can be locked !!!
+  ' this is to ensure all latest changes were saved, so the change is not applied to wrong generation
+  If thisAffItem.isLocked() Then
+     thisErr = innovator.newError("Document '" & thisAffItem.getProperty("keyed_name","") & "is still locked. Please unlock all affected documents, first !")
+     Return thisErr
+  End If
+Next
 
 ' Get the affected documents 
 For i = 0 To aff_docs_count - 1
+  thisAffItem = affRels.getItemByIndex(i)
   Dim tempItem As Aras.IOM.Item
-  Dim thisAffItem As Aras.IOM.Item = affRels.getItemByIndex(i)
   Dim affectedRelId As String = thisAffItem.getID()
   Dim affectedId As String = thisAffItem.getProperty("related_id")
   Dim replacedId As String = thisAffItem.getProperty("replaced_item_id")

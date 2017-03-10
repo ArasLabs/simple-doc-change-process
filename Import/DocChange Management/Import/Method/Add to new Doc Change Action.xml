@@ -88,6 +88,17 @@ if (myItems.getItemCount() === 0) {
    return;
 }
 
+// check if items are still lock, abort if true
+// this is to avoid incosistencies linking to an old generation in case changes were not
+// saved before this action started !!!
+for (i=0; i<myItems.getItemCount(); i++) {
+   myItem = myItems.getItemByIndex(i);
+   if (myItem.isLocked()) {
+      alert( "Item '" + myItem.getProperty("keyed_name","") + "' is still locked. Please unlock all items, first and try again.");
+      return;
+   }
+}
+
 //debugger;
 
 // create the blank DocChange

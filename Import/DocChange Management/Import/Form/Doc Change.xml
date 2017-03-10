@@ -88,7 +88,7 @@
       <bg_color>#FFFFFF</bg_color>
       <border_width>0</border_width>
       <display_length>60</display_length>
-      <field_type>text</field_type>
+      <field_type>ml_string</field_type>
       <font_color>#000000</font_color>
       <font_family>arial, helvetica, sans-serif</font_family>
       <font_size>8pt</font_size>
@@ -105,8 +105,8 @@
       <source_id keyed_name="D720E582BE5F4EF096630A5DE75A76FD" type="Body">D720E582BE5F4EF096630A5DE75A76FD</source_id>
       <tab_index>3328</tab_index>
       <tab_stop>1</tab_stop>
-      <x>334</x>
-      <y>15</y>
+      <x>341</x>
+      <y>14</y>
      </Item>
      <Item type="Field" id="A489EAB4F4424FF6970E0ECEB5C16D14" action="add">
       <bg_color>#FFFFFF</bg_color>
@@ -128,8 +128,8 @@
       <source_id keyed_name="D720E582BE5F4EF096630A5DE75A76FD" type="Body">D720E582BE5F4EF096630A5DE75A76FD</source_id>
       <tab_index>3072</tab_index>
       <tab_stop>1</tab_stop>
-      <x>192</x>
-      <y>64</y>
+      <x>190</x>
+      <y>63</y>
      </Item>
      <Item type="Field" id="EFB9C92688F6452EAE6EC06A3B1432D8" action="add">
       <bg_color>#FFFFFF</bg_color>
@@ -173,8 +173,8 @@
       <source_id keyed_name="D720E582BE5F4EF096630A5DE75A76FD" type="Body">D720E582BE5F4EF096630A5DE75A76FD</source_id>
       <tab_index>2000</tab_index>
       <tab_stop>1</tab_stop>
-      <x>512</x>
-      <y>67</y>
+      <x>520</x>
+      <y>66</y>
      </Item>
      <Item type="Field" id="83F640AA5AFB43C5A001C704156F27DC" action="add">
       <bg_color>#FFFFFF</bg_color>
@@ -220,6 +220,7 @@
     <sort_order>129</sort_order>
     <source_id keyed_name="Doc Change" type="Form">FA0E9B6EDF7F44C4BA927EB4B6825D4B</source_id>
    </Item>
+   
   </Relationships>
  </Item>
  <Item type="Field" id="42F2CC4B617E4C43817BE1687B7B8F30" action="edit">

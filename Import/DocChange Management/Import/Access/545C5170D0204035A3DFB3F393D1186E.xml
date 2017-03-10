@@ -1,0 +1,11 @@
+﻿<AML>
+ <Item type="Access" id="545C5170D0204035A3DFB3F393D1186E" action="add">
+  <can_change_access>0</can_change_access>
+  <can_delete>1</can_delete>
+  <can_get>1</can_get>
+  <can_update>1</can_update>
+  <related_id keyed_name="DocChange Management" type="Identity">E839B38E08D44AB499777C05A59DC37D</related_id>
+  <sort_order>128</sort_order>
+  <source_id keyed_name="New Doc Change" type="Permission">54C383E13D1D4AEC9EF10E375A3A7313</source_id>
+ </Item>
+</AML>

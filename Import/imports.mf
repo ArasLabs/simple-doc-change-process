@@ -1,5 +1,5 @@
 <imports>
-  <package name="addOn.process.DocChange" path="DocChange\Import">
+  <package name="DocChange Management" path="DocChange Management\Import">
     <dependson name="com.aras.innovator.solution.PLM" />
   </package>
 </imports>

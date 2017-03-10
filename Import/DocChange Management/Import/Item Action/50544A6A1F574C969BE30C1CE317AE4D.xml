@@ -2,7 +2,8 @@
  <Item type="Item Action" id="50544A6A1F574C969BE30C1CE317AE4D" action="add">
   <related_id keyed_name="Add to new Doc Change" type="Action">
    <Item type="Action" id="62B5054447B94D5BA445B11CE6181526" action="add">
-    <item_query>&lt;Item type="{@type}" id="{@id}" levels= "0" select="keyed_name, major_rev, id,is_released" action="get" /&gt;</item_query>
+    <item_query>&lt;Item type="{@type}" id="{@id}" levels= "1" action="get" /&gt;</item_query>
+    <label xml:lang="en">Add to new Doc Change</label>
     <location>client</location>
     <method keyed_name="Add to new Doc Change Action" type="Method">
      <Item type="Method" action="get" select="id">
