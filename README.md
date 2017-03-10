@@ -21,8 +21,8 @@ Release notes/descriptions for the original project posted on the previous Aras 
 
 Release | Notes
 --------|--------
-[v1.0](https://github.com/ArasLabs/simple-doc-change-process/releases/tag/v1.0) | Solution import package, Client html+xml, and ReadMe. For installation instructions, see [Documentation/ReadMe.md](Documentation/ReadMe - how to install.txt).
-[v2.0](https://github.com/ArasLabs/simple-doc-change-process/releases/tag/v2.0) | v2.0	9.0.x & 9.1.0 solution import package, Client html+xml, and ReadMe. Some optimizations. For installation instructions, see [Documentation/ReadMe.md](Documentation/ReadMe - how to install.txt).
+[v1.0](https://github.com/ArasLabs/simple-doc-change-process/releases/tag/v1.0) | Solution import package, Client html+xml, and ReadMe. For installation instructions, see [Documentation/ReadMe - how to install.txt](Documentation/ReadMe - how to install.txt).
+[v2.0](https://github.com/ArasLabs/simple-doc-change-process/releases/tag/v2.0) | v2.0	9.0.x & 9.1.0 solution import package, Client html+xml, and ReadMe. Some optimizations. For installation instructions, see [Documentation/ReadMe - how to install.txt](Documentation/ReadMe - how to install.txt).
 
 #### Supported Aras Versions
 
