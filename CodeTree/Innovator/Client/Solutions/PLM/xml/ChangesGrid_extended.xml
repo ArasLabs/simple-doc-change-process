@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<table delim="|" font="Arial-8" sel_bgColor="#ffff00" sel_TextColor="#ffffff" link_func="onLink" 
+draw_grid="true" multiselect="true" column_draggable="true" enableHtml="false" 
+enterAsTab="false" bgInvert="false" onDoubleClick="doDoubleClick" onRowSelect="onRowSelect" editable="false" onXmlLoaded = "onXmlLoaded">
+	<thead>
+		<th align="c">Type</th>
+		<th align="c">Number</th>
+		<th align="c">Title</th>
+		<th align="c">State</th>
+		<th align="c">Release Date</th>
+		<th align="c">Info</th>
+	</thead>
+	<columns>
+		<column width="75" edit="" align="l"/>
+		<column width="100" edit="" align="l"/>
+		<column width="250" edit="" align="l"/>
+		<column width="100" edit="" align="l"/>
+		<column width="100" edit="" align="l"/>
+		<column width="200" edit="" align="l"/>
+	</columns>
+	<menu/>
+</table>

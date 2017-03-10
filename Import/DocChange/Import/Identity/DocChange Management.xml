@@ -1,0 +1,21 @@
+﻿<AML>
+ <Item type="Identity" id="E839B38E08D44AB499777C05A59DC37D" action="add">
+  <description></description>
+  <is_alias>0</is_alias>
+  <name>DocChange Management</name>
+  </Item>
+ <Item type="Member" id="C608B158949D4A57A5AD5D726D83E9BC" action="add">
+  <related_id keyed_name="Doc Reviewer" type="Identity">0178AE37B4AA4E9EBDBD4FE1FBEA70FF</related_id>
+  <sort_order>1152</sort_order>
+  <source_id keyed_name="DocChange Management" type="Identity">E839B38E08D44AB499777C05A59DC37D</source_id>
+ </Item>
+
+ <Item type="Member" id="3BE65A09076F4149872A30C21A6B805F" action="add">
+  <related_id keyed_name="World" type="Identity">
+   <Item type="Identity" action="get" select="id">
+    <name>World</name>
+   </Item>
+  </related_id>
+  <sort_order>1280</sort_order>
+  <source_id keyed_name="DocChange Management" type="Identity">E839B38E08D44AB499777C05A59DC37D</source_id>
+ </Item></AML>

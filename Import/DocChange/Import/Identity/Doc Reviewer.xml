@@ -1,0 +1,7 @@
+﻿<AML>
+ <Item type="Identity" id="0178AE37B4AA4E9EBDBD4FE1FBEA70FF" action="add">
+  <description>dummy used in Doc Approvers/Reviewers - replace with real users</description>
+  <is_alias>1</is_alias>
+  <name>Doc Reviewer</name>
+ </Item>
+</AML>

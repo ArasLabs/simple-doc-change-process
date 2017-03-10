@@ -1,0 +1,29 @@
+﻿<AML>
+ <Item type="Method" id="5C22999AC6D6433D881ABAB44A390CFA" action="add">
+  <method_code><![CDATA[if (document.isEditMode) {
+    var tmp_identity = document.forms[0].owned_by_id.value;
+    if (tmp_identity === "") {
+       var innovator = new top.Innovator();
+       var currentUserId = innovator.getUserID();
+       var currentIdentityId = getFirstAliasForUser(currentUserId);
+       var defaultIdentity;
+       var qry = new Item("Identity","get");
+       qry.setID(currentIdentityId);
+       defaultIdentity = qry.apply();
+       document.forms[0].owned_by_id.value = defaultIdentity.getProperty('keyed_name');
+       document.forms[0].owned_by_id.fireEvent('onchange');
+    }
+}
+
+function getFirstAliasForUser(userID) {
+    var qry = new Item("Alias","get");
+    qry.setProperty("source_id",userID);
+    var aliases = qry.apply();
+    return aliases.getItemByIndex(0).getProperty("related_id");
+}
+
+]]></method_code>
+  <method_type>JavaScript</method_type>
+  <name>Get_DocChange_Default_Owner</name>
+ </Item>
+</AML>

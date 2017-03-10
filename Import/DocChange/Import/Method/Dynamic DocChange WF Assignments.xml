@@ -1,0 +1,320 @@
+﻿<AML>
+ <Item type="Method" id="C7803D9250554276BCC5439706221AC9" action="add">
+  <method_code><![CDATA[' Server side Method (VB): Dynamic DocChange WF Assignments
+'
+'
+' Event: This method can be attached To WF activities (OnActivate) 
+'        driving the "Doc Change" process
+'
+' It assigns Author (owned_by) and Responsible (managed_by)
+' of all affected documents to Doc Change WF activities with this method attached
+'
+' Rule: if a document has no owner assigned, then use the creator for the assignemnt instead
+'
+' The WF makes use of 2 dummy identities
+'   [affected item Owners]
+'   [affected item Managers]
+'
+' If any of these 2 identities are listed in this activity's assignments,
+' then replace these place holder assignments with all actual owners and/or managers
+' of all affected items.
+' Also checks the an identity is not added twice.
+'
+'
+' ### future enhancement.   If "required" flag is NOT set,
+'                           then distribute voting weight evenly
+'
+' last modified: 25-Oct-2008
+'
+' DO NOT FORGET to omment this line out, when finished with debugging !!!
+'System.Diagnostics.Debugger.Break()
+
+Dim changeType As String = "Doc Change"
+Dim changeNumberProperty As String = "doc_change_number"
+Dim innovator As Aras.IOM.Innovator = Me.getInnovator()
+Dim activityId As String = Me.getAttribute("id")
+
+Dim i, k, l As Integer
+Dim count As Integer
+
+Dim workflowProcess As Aras.IOM.Item
+Dim workflowProcessActivity As Aras.IOM.Item
+Dim changeItem As Aras.IOM.Item
+Dim changeItemAffectedItemsRef As Aras.IOM.Item
+
+Dim additionalIdentities1 As System.Collections.Hashtable = New Hashtable()
+Dim additionalIdentities2 As System.Collections.Hashtable = New Hashtable()
+Dim currentAssignments As System.Collections.Hashtable = New Hashtable()
+
+Dim activity As Aras.IOM.Item
+Dim activityName As String
+
+Dim qry As Aras.IOM.Item
+
+' Read the activity and find the related change
+
+' get the activty's name
+qry = Me.newItem("Activity", "get")
+qry.setAttribute("select","name")
+qry.setProperty("id", activityId)
+activity = qry.apply()
+activityName = activity.getProperty("name")
+
+' get the activity (item) inside the workflow process
+qry = Me.newItem("Workflow Process Activity", "get")
+qry.setAttribute("select","name, source_id")
+qry.setProperty("related_id", activityId)
+workflowProcessActivity = qry.apply()
+
+' get the workflow process (item)
+qry = Me.newItem("Workflow Process", "get")
+qry.setAttribute("select","name,copied_from_string")
+qry.setProperty("id", workflowProcessActivity.getProperty("source_id"))
+workflowProcess = qry.apply()
+
+' get the change (item) connected to the workflow process
+qry = Me.newItem(changeType, "get")
+qry.setAttribute("select",changeNumberProperty + ",owned_by_id")
+qry.setProperty(changeNumberProperty, workflowProcess.getProperty("name"))
+changeItem = qry.apply()
+
+'### exit criteria:  if ChangeItem cannot be found it's not a valid type to continue
+If changeItem.isError Then
+   Return innovator.newResult("Workflow controlled item is not of type: " + changeType + "!")
+End If
+
+Dim owners_placeholder_found As Boolean = False
+Dim owners_voting_required As String = ""
+Dim owners_voting_weight As Integer = 100
+Dim managers_placeholder_found As Boolean = False
+Dim managers_voting_required As String = ""
+Dim managers_voting_weight As Integer = 100
+Dim docChange_owned_by_id As String = ""
+Dim identity As Aras.IOM.Item
+Dim assignmentName As String
+Dim activityAssignment As Aras.IOM.Item
+
+'### loop through current assignments of activity
+activity.fetchRelationships("Activity Assignment")
+Dim assignments As Aras.IOM.Item = activity.getRelationships("Activity Assignment")
+count = assignments.getItemCount() ' current assignments
+
+For i = 0 To count - 1
+    activityAssignment = assignments.getItemByIndex(i)
+    
+    qry = Me.newItem("Identity", "get")
+    qry.setAttribute("select","name")
+    qry.setProperty("id", activityAssignment.getProperty("related_id"))
+    identity = qry.apply()
+    assignmentName = identity.getProperty("name")
+    
+    Select Case assignmentName
+     Case "[affected item Owners]"
+         owners_placeholder_found = True
+         owners_voting_weight = activityAssignment.getProperty("voting_weight")
+         owners_voting_required = activityAssignment.getProperty("is_required","")
+        
+         activityAssignment.setAction("delete") ' delete the placeholder from asssignments
+         activityAssignment.setID(activityAssignment.getID())
+         activityAssignment = activityAssignment.apply()
+
+     Case "[affected item Managers]"
+         managers_placeholder_found = True
+         managers_voting_weight = activityAssignment.getProperty("voting_weight")
+         managers_voting_required = activityAssignment.getProperty("is_required","")
+
+         activityAssignment.setAction("delete") ' delete the placeholder from asssignments
+         activityAssignment.setID(activityAssignment.getID())
+         activityAssignment = activityAssignment.apply()
+
+     Case Else ' register all other assigments
+         If assignmentName = "Owner" Then
+            docChange_owned_by_id = changeItem.getProperty("owned_by_id") '  remember id if, change owner is listed in assigments
+         End If
+         currentAssignments.Add(activityAssignment.getRelatedItem().getID,activityAssignment)
+
+    End Select
+Next
+
+
+' ### if no place holders found, then look in activity (template) of workflow map
+' if they are found there continue adding new owners or managers to assignements list
+
+If Not owners_placeholder_found Then
+  If Not managers_placeholder_found Then
+
+    ' First, find the original workflow map activity and it's assigned identities
+    qry = Me.newItem("Workflow Map", "get")
+    qry.setProperty("id", workflowProcess.getProperty("copied_from_string"))
+    Dim workflowMap As Aras.IOM.Item = qry.apply()
+
+    workflowMap.fetchRelationships("Workflow Map Activity")
+    Dim workflowMapActivitiesRef As Aras.IOM.Item = workflowMap.getRelationships("Workflow Map Activity")
+    count = workflowMapActivitiesRef.getItemCount()
+
+    Dim found As Boolean = False
+    Dim activityTempl As Aras.IOM.Item = Nothing
+    For i = 0 To count - 1
+      activityTempl = workflowMapActivitiesRef.getItemByIndex(i).getRelatedItem()
+      If (activityTempl.getProperty("name") = activityName) Then
+        found = True
+        Exit For
+      End If
+    Next
+
+    activityTempl.fetchRelationships("Activity Template Assignment")
+    Dim TemplAssignments As Aras.IOM.Item = activityTempl.getRelationships("Activity Template   Assignment")
+
+    count = TemplAssignments.getItemCount()
+    For i = 0 To count - 1
+      activityAssignment = TemplAssignments.getItemByIndex(i)
+    
+      qry = Me.newItem("Identity", "get")
+      qry.setAttribute("select","name")
+      qry.setProperty("id", activityAssignment.getProperty("related_id"))
+      identity = qry.apply()
+      assignmentName = identity.getProperty("name")
+
+      ' just capture the settings of the place holder assignments, if found
+       Select Case assignmentName
+       Case "[affected item Owners]"
+         owners_placeholder_found = True
+         owners_voting_weight = activityAssignment.getProperty("voting_weight")
+         owners_voting_required = activityAssignment.getProperty("is_required","")
+
+       Case "[affected item Managers]"
+         managers_placeholder_found = True
+         managers_voting_weight = activityAssignment.getProperty("voting_weight")
+         managers_voting_required = activityAssignment.getProperty("is_required","")
+
+       Case Else ' nothing to do
+
+      End Select
+    Next
+
+' ### exit criteria:  if no placeholders found, there is nothing to do
+    If Not owners_placeholder_found Then
+      If Not managers_placeholder_found Then
+        Return innovator.newResult("No affected item owner/manager assignments (placeholder) found.")
+      End If
+    End If
+
+  End If
+End If
+
+' ### Go thru the affected items of the change and collect the identities 
+' that need to be added to the activity assignments
+qry = Me.newItem("Doc Change Affected Documents","get")
+qry.setAttribute("select","related_id(related_id, owned_by_id, managed_by_id)")
+qry.setProperty("source_id",changeItem.getId())
+
+Dim affRels As Aras.IOM.Item = qry.apply()
+
+' Check for errors -- there must be at least one Affected Item
+Dim aff_docs_count As Integer = affRels.getItemCount()
+Dim thisErr As Aras.IOM.Item
+If (aff_docs_count = 0) Then 
+  thisErr = innovator.newError("No Affected Documents found")
+  'Return thisErr
+  Return Me ' this is not an error - just nothing to do
+Else If (aff_docs_count < 0)
+  thisErr = innovator.newError("Error getting Affected Documents")
+  Return thisErr
+End If
+
+Dim newIdentities_count As Integer = 0
+For i = 0 To aff_docs_count - 1
+
+  Dim thisAffItemRel As Aras.IOM.Item = affRels.getItemByIndex(i)
+  qry = Me.newItem("Document", "get")
+  qry.setAttribute("select","item_number,name,created_by_id,owned_by_id,managed_by_id")
+  qry.setProperty("id", thisAffItemRel.getProperty("related_id"))
+  Dim thisAffItem As Aras.IOM.Item = qry.apply()
+
+  Dim identityId1 As String = thisAffItem.getProperty("owned_by_id")
+  Dim identityId2 As String = thisAffItem.getProperty("managed_by_id")
+
+  Dim identityToAdd As Aras.IOM.Item
+
+  ' ## Rule: user creator of document if owner not set
+  If identityId1 = Nothing  Then
+     identityId1 = thisAffItem.getProperty("created_by_id")
+     ' this is a user id - get the alias for it
+     qry = Me.newItem("Alias","get")
+     qry.setProperty("source_id",identityId1)
+     qry = qry.apply()
+     identityId1 = qry.getItemByIndex(0).getProperty("related_id")
+  End If
+  
+  If identityId1 <> Nothing And owners_placeholder_found Then
+    If Not (currentAssignments.ContainsKey(identityId1) Or _
+            additionalIdentities1.ContainsKey(identityId1)) Then
+
+       If identityId1 <> docChange_owned_by_id Then  'don't add the change owner, 
+         qry = Me.newItem("Identity", "get")
+         qry.setProperty("id", identityId1)
+         identityToAdd = qry.apply()
+         additionalIdentities1.Add(identityId1, identityToAdd)
+         newIdentities_count = newIdentities_count + 1
+       End If
+    End If
+  End If
+
+  If identityId2 <> Nothing And managers_placeholder_found Then
+    If Not (currentAssignments.ContainsKey(identityId2) Or _
+            additionalIdentities2.ContainsKey(identityId2)) Then
+
+       If identityId1 <> docChange_owned_by_id Then 'don't add the change owner
+         qry = Me.newItem("Identity", "get")
+         qry.setProperty("id", identityId2)
+         identityToAdd = qry.apply()
+         additionalIdentities2.Add(identityId2, identityToAdd)
+         newIdentities_count = newIdentities_count + 1
+       End If
+    End If
+  End If
+Next
+
+'### exit criteria: If no owners nor managers found, do noting
+If newIdentities_count = 0 Then
+  Return innovator.newResult("No owners/managers found on affected items.")
+End If
+
+
+' ### Add the dynamic assigments to the activites assignments list
+Dim weightString As String
+Dim newAssignment As Aras.IOM.Item
+
+weightString = CInt(owners_voting_weight)
+For Each entry As DictionaryEntry In additionalIdentities1
+    identity = entry.Value
+    newAssignment = activity.createRelationship("Activity Assignment", "add")
+    newAssignment.setRelatedItem(identity)
+
+    If owners_voting_required = "1" Then
+       newAssignment.setProperty("is_required", "1")
+    End If
+    newAssignment.setProperty("voting_weight", weightString)
+Next
+
+weightString = CInt(managers_voting_weight)
+For Each entry As DictionaryEntry In additionalIdentities2
+    identity = entry.Value
+    newAssignment = activity.createRelationship("Activity Assignment", "add")
+    newAssignment.setRelatedItem(identity)
+
+    If managers_voting_required = "1" Then
+       newAssignment.setProperty("is_required", managers_voting_required)
+    End If
+    newAssignment.setProperty("voting_weight", weightString)
+Next
+
+activity.setAction("edit")
+activity.apply()
+
+Return innovator.newResult("This method was <b>successful</b>.")
+]]></method_code>
+  <method_type>VB</method_type>
+  <name>Dynamic DocChange WF Assignments</name>
+ </Item>
+</AML>

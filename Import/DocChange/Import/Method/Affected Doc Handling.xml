@@ -1,0 +1,145 @@
+﻿<AML>
+ <Item type="Method" id="1712DBD1719044EBA00F17BBF658EE64" action="add">
+  <comments>Adapted to work for Doc Changes only</comments>
+  <method_code><![CDATA[' Server side Method: Affected DocHandling
+' triggerd from Doc Change life cycle transition: New --> In Work
+'
+' creates new versions for all affeced documents listed on a Doc Change
+' preserves old_rev setting for Doc Change history
+'
+
+' adapted from AffectedItemHandling to only work for affected documents.
+'
+' last modified: 24-Oct-2008
+'
+'System.Diagnostics.Debugger.Break() 
+
+Dim plmIdentity As Aras.Server.Security.Identity = Aras.Server.Security.Identity.GetByName("Aras PLM")
+Dim PermissionWasSet As Boolean = Aras.Server.Security.Permissions.GrantIdentity(plmIdentity)
+
+Dim innovator As Aras.IOM.Innovator = Me.newInnovator()
+Dim qry As Aras.IOM.Item
+Dim thisErr As Aras.IOM.Item
+Dim i As Integer
+
+Dim doc_changeId As String = Me.getId()
+qry = Me.newItem("Doc Change Affected Documents","get")
+qry.setAttribute("select","related_id(related_id, major_rev),replaced_item_id,manual_next_rev,old_doc_rev")
+qry.setProperty("source_id",doc_changeId)
+
+Dim affRels As Aras.IOM.Item = qry.apply()
+
+' Check for errors -- there must be at least one Affected Item
+Dim aff_docs_count As Integer = affRels.getItemCount()
+If (aff_docs_count = 0) Then 
+  thisErr = innovator.newError("No Affected Documents found")
+  Return thisErr
+Else If (aff_docs_count < 0)
+  thisErr = innovator.newError("Error getting Affected Documents")
+  Return thisErr
+End If
+
+
+' Get the affected documents 
+For i = 0 To aff_docs_count - 1
+  Dim tempItem As Aras.IOM.Item
+  Dim thisAffItem As Aras.IOM.Item = affRels.getItemByIndex(i)
+  Dim affectedRelId As String = thisAffItem.getID()
+  Dim affectedId As String = thisAffItem.getProperty("related_id")
+  Dim replacedId As String = thisAffItem.getProperty("replaced_item_id")
+  Dim manual_next_rev As String = thisAffItem.getProperty("manual_next_rev","")
+
+  '''''''''''''''''''''''''''''''''''
+  ' save the inital rev of the affected in relationshiop oproperty old_doc_rev
+  qry = Me.newItem("Document","get")
+  qry.setId(affectedId)
+  Dim thisDoc As Aras.IOM.Item = qry.apply()
+  If (Not thisDoc.isError()) Then
+    Dim docRev As String
+    If thisAffItem.getProperty("old_doc_rev","") = "" Then
+       docRev = thisDoc.getProperty("major_rev","") ' doc's rev
+       
+       tempItem = Me.newItem("Doc Change Affected Documents","edit")
+       tempItem.setID(affectedRelId)
+       tempItem.setAttribute("version","0")'prevent creation of new generation
+       tempItem.setProperty("old_doc_rev", docRev )
+       tempItem = tempItem.apply()
+       If (tempItem.isError()) Then
+           thisErr = innovator.newError("cannot set old_doc_rev" & tempItem.getErrorDetail())
+           Return thisErr
+       End If
+    End If
+
+  End If
+
+  '''''''''''''''''''''''''''''''''''
+  ' Version the affected document
+  '''''''''''''''''''''''''''''''''''
+  tempItem = Me.newItem("Document","version")
+  tempItem.setId(affectedId)
+  tempItem = tempItem.apply()
+  If (tempItem.isError()) Then
+    thisErr = innovator.newError("Error versioning Affected Document: " & tempItem.getErrorDetail())
+    Return thisErr
+  End If
+
+  ' ### find manual_rev in Revision sequence, and use it if found
+  ' Dim newRev As String = tempItem.getProperty("major_rev","")
+  ' ### need to add some checking that manual rev is not already used.
+  If (manual_next_rev = "" Or manual_next_rev.IndexOf("auto") >= 0) Then
+    tempItem.setAction("unlock")
+  Else
+    ' newRev = tempItem.getProperty("major_rev","")
+    tempItem.setAction("edit")
+    tempItem.setAttribute("version","0")
+    tempItem.setProperty("major_rev",manual_next_rev)
+  End If
+  tempItem = tempItem.apply()
+
+  If (tempItem.isError()) Then
+    thisErr = innovator.newError("Error unlocking Affected Item: " & tempItem.getErrorDetail())
+    Return thisErr
+  End If
+
+  ' Set the affected document id to id of new version
+  Dim new_related_id As String = tempItem.getId()
+  tempItem = Me.newItem("Doc Change Affected Documents","edit")
+  tempItem.setId(affRels.getItemByIndex(i).getId())
+  tempItem.setAttribute("serverEvents", "0")
+  tempItem.setAttribute("doGetItem", "0")
+  tempItem.setProperty("related_id",new_related_id)
+  tempItem = tempItem.apply()
+
+
+  '''''''''''''''''''''''''''''''''''
+  ' promote draft and preliminary documents to "Draft (frozen)
+  'If (Not thisDoc.isError()) Then
+  '  Dim doc_config_id As String = thisDoc.getProperty("config_id","")
+  '  Dim docStatus As String = thisDoc.getProperty("state","")
+  '  If thisDoc.getProperty("state","") = "Draft" Or _
+  '     thisDoc.getProperty("state","") = "Preliminary" Then
+
+      ' now promote the affected document's state
+  '   thisDoc.setAction("promoteItem")
+  '    thisDoc.setProperty("state","Draft (frozen)")
+  '    thisDoc = thisDoc.apply()
+  '    If (thisDoc.isError()) Then
+  '      thisErr = innovator.newError("Error promoting affected Document: " & thisDoc.getErrorDetail())
+  '      Return thisErr
+  '    End If
+  '  End If
+  
+  ' End If
+
+Next
+
+' reset 
+If (PermissionWasSet=True)	Then
+	Aras.Server.Security.Permissions.RevokeIdentity(plmIdentity)
+End If
+
+Return Me]]></method_code>
+  <method_type>VB</method_type>
+  <name>Affected Doc Handling</name>
+ </Item>
+</AML>

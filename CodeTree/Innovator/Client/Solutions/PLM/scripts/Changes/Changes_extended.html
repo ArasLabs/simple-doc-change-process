@@ -1,0 +1,318 @@
+<!-- (c) Copyright by Aras Corporation, 2004-2007. -->
+<html>
+<head>
+<script type="text/javascript" src="../../../../javascript/AddConfigurationLink.js">Toolbar;TreeTable</script>
+<style type="text/css">
+  .loadingAppletStyle{ width:0px;  height:0px;  visibility:hidden;  }
+  .loadedGridStyle   { position:absolute; top:28; left:0; width:100%; height:expression(document.body.clientHeight-28); visibility:visible; }
+</style>
+<script language="JScript" src="../../../PLM/javascript/gridTools.js"></script>
+<script language="JScript" src="../../../PLM/javascript/toolbarTools.js"></script>
+
+<script language="JavaScript" src="../../../../javascript/scriptset2.aspx"></script>
+
+<script type="text/javascript">
+document.writeln('<base HREF="'+top.aras.getScriptsURL()+'" />');
+</script>
+</head>
+
+<body  topmargin="0" leftmargin="0">
+
+<script type="text/javascript">
+
+var toolbarReady = false;
+var gridReady = false;
+var isEditMode = false;
+var GridXmlLoadedFirstTime = true;
+
+onload = function()
+{
+  grid.className = "loadedGridStyle";
+  initGrid();
+}
+
+
+function initGrid()
+{
+  if (!gridReady)
+  {
+     setTimeout('initGrid()', 100);
+     return;
+  }
+
+  gridApplet = document.grid;
+
+  // Get the part Object
+  var thisItem = top.document.frames['instance'].document.thisItem;
+
+	// thisItem could be a part or document
+	var objId = thisItem.getProperty('id');
+  var objType = thisItem.getType();
+
+  var innovator = new top.Innovator();
+	var ecnQry = innovator.newItem("ECN Affected Item", "get");
+	ecnQry.setAttribute("select", "source_id(id, item_number, title, state, release_date)");
+
+	var ecrQry = innovator.newItem("ECR Affected Item", "get");
+	ecrQry.setAttribute("select", "source_id(id, item_number, title, state, release_date)");
+
+	var relQry = innovator.newItem("Affected Item", "get");
+	relQry.setAttribute("select", "id");
+
+	var logicalOR = relQry.newOR();
+   logicalOR.setProperty("affected_id", objId);
+   logicalOR.setProperty("new_item_id", objId);
+  
+	//relQry.setProperty("affected_id", objId);
+	relQry.setProperty("affected_type", objType);
+	
+	// query for ECNs
+	ecnQry.setRelatedItem(relQry);
+	
+	// query for EXRs
+	ecrQry.setRelatedItem(relQry);
+
+	// query for Doc Changes
+	var docChangeQry = innovator.newItem("Doc Change Affected Documents", "get");
+	docChangeQry.setAttribute("select", "source_id(id, doc_change_number, doc_change_title, state, release_date)");
+	docChangeQry.setProperty("related_id", objId);
+
+	// query for PRs
+ 	var prQry = innovator.newItem("PR", "get");
+	prQry.setAttribute("select", "id, item_number, title, state, release_date");
+ 	prQry.setProperty("affected_item", objId);
+
+
+  var ecns = ecnQry.apply();
+  var ecnCount = ecns.getItemCount();
+  var ecrs = ecrQry.apply();
+  var ecrCount = ecrs.getItemCount();
+  var docChanges = docChangeQry.apply();
+  var docChangeCount = docChanges.getItemCount();
+
+  var prs = prQry.apply();
+  var prCount = prs.getItemCount();
+
+  var ecnError = false;
+
+  if(ecnCount === -1  && ecrCount === -1 && prCount === -1)  {
+    alert(ecns.getErrorDetail());
+	  alert(ecrs.getErrorDetail());
+	  alert(prs.getErrorDetail());
+	  return;
+  }
+
+  if (ecnCount === -1)	{
+		alert(ecns.getErrorDetail());
+	}
+
+	if(ecrCount === -1)	  {
+	   alert(ecns.getErrorDetail());
+	}
+	
+	if(docChangeCount === -1)	  {
+	   alert(docChanges.getErrorDetail());
+	}
+
+    if(prCount === -1)	  {
+	   alert(prs.getErrorDetail());
+	}
+	
+    // Convert the Grid Data to DOM
+	var gridDom = top.aras.createXMLDocument();
+	gridDom.load(top.aras.getI18NXMLResource("ChangesGrid_extended.xml", "../Solutions/PLM/"));
+    var tmpDom = top.aras.createXMLDocument();
+
+    ecns = ecns.getItemsByXPath("//Item[@type='ECN']");
+    ecrs = ecrs.getItemsByXPath("//Item[@type='ECR']");
+    docChanges = docChanges.getItemsByXPath("//Item[@type='Doc Change']");
+	
+	// for DocChange, query for addl. infos
+	docChangeQry = innovator.newItem("Doc Change Affected Documents", "get");
+	docChangeQry.setAttribute("select", "old_doc_rev, manual_next_rev");
+	docChangeQry.setProperty("related_id", objId);
+    var affectedDocRels = docChangeQry.apply();
+
+    var tmpArr = [ecns, ecrs, docChanges, prs];
+    var itms, itm, id, valsArr, valsArr0, linkParam, d, nds, aff_itm;
+    for (var i = 0; i < tmpArr.length; i++)
+    {
+      switch (i)
+      {
+        case 0:
+          valsArr0 = top.aras.getResource("plm", "affected_items.ecn");
+          linkParam = "ECN Affected Item";
+          break;
+        case 1:
+          valsArr0 = top.aras.getResource("plm", "affected_items.ecr");
+          linkParam = "ECR Affected Item";
+          break;
+        case 2:
+          valsArr0 = "Doc Change"; // hard coded to english item type name - no resource registered in xml file
+          linkParam = "Doc Change Affected Documents";
+          break;
+        case 3:
+          valsArr0 = top.aras.getResource("plm", "affected_items.pr");
+          linkParam = "PR";
+          break;
+      }
+      itms = tmpArr[i];
+      for (var j = 0; j < itms.getItemCount(); j++)
+      {
+        itm = itms.getItemByIndex(j);
+        id = itm.getAttribute("id");
+		
+		if (i == 2) { // doc change has other property names
+		  aff_itm = affectedDocRels.getItemByIndex(j);
+		  infotext = "Rev: " + aff_itm.getProperty("old_doc_rev","") + " -> " +  aff_itm.getProperty("manual_next_rev", "")
+          valsArr = [valsArr0, itm.getProperty("doc_change_number"), itm.getProperty("doc_change_title"), itm.getProperty("state"), itm.getProperty("release_date"), infotext];
+		} else {
+		  infotext = "--"  // perhaps add 
+          valsArr = [valsArr0, itm.getProperty("item_number"), itm.getProperty("title"), itm.getProperty("state"), itm.getProperty("release_date"), infotext];
+        }
+		for (var k = 0; k < valsArr.length; k++)
+        {
+          if (!valsArr[k]) valsArr[k] = "";
+        }
+        tmpDom.loadXML("<tr><td/><td/><td/><td/><td/><td/></tr>");
+        d = tmpDom.documentElement;
+        d.setAttribute("id", id);
+        d.setAttribute("action", id);
+        nds = d.selectNodes("td");
+        for (var k = 0; k < nds.length; k++)
+        {
+          nds[k].text = valsArr[k];
+        }
+        gridDom.selectSingleNode("/table").appendChild(tmpDom.selectSingleNode("/tr"));
+      }
+    }
+
+  gridApplet.initXML(gridDom.xml);
+  gridApplet.sort(2,false);
+
+  updateToolbar();
+}
+
+function doDoubleClick(rowId) {
+  gridApplet = document.grid;
+  if (!rowId)
+    rowId = gridApplet.getSelectedId();
+  if (rowId != "") {
+    var objType = gridApplet.cells(rowId, 0).getValue();
+    top.aras.uiShowItem(objType, rowId, 'tab view', true);
+  }
+}
+
+function loadToolbar()
+{
+  toolbar = document.toolbar;
+  toolbar.setImageBase("../cbin/");
+  toolbar.loadXML(top.aras.getI18NXMLResource("changes_toolbar.xml", "../Solutions/PLM/"));
+  toolbar.ShowToolbar("tb1");
+  initToolbar();
+}
+
+function onXmlLoaded() {
+  gridApplet.setPaintEnabled(true);
+  gridApplet.showContent();
+  gridApplet.sort(2,false);
+  updateToolbar();
+}
+
+function onRowSelect(rowId) {
+  if (rowId)
+    setControlEnabled("show_item", true);
+  else
+    setControlEnabled("show_item", false);
+}
+
+function onShow_itemClick() {
+  setTimeout("doDoubleClick('')", 10);
+}
+
+function onRefreshClick() {
+  setTimeout("initGrid()", 10);
+}
+
+</script>
+
+<script language="jscript" for="toolbar" event="Onload()">
+  toolbarReady = true;
+  loadToolbar();
+</script>
+
+<script language="jscript" for="toolbar" event="Onclick(tbItem)">
+  onToolbarButtonClick(tbItem);
+</script>
+
+<script language="jscript" for="grid" event="GridStart(isSuccess)">
+	onGridLoad();
+</script>
+
+<script language="jscript" for="grid" event="GridMenuInit(rowId, col, p)">
+  onMenuCreate(rowId, col, p);
+  return false;
+</script>
+
+<script language="jscript" for="grid" event="GridXmlLoaded(isSuccess)">
+	if(GridXmlLoadedFirstTime) {
+		GridXmlLoadedFirstTime = false;
+		onXmlLoaded();
+	}
+</script>
+
+<script language="jscript" for="grid" event="GridKeyPress(kEv)">
+  var res = onKeyPressed(kEv);
+  return res;
+</script>
+
+<script language="jscript" for="grid" event="GridEditCell(mode, rowID, col)">
+  var res = onEditCell(mode, rowID, col);
+  return res;
+</script>
+
+<script language="jscript" for="grid" event="GridRowSelect(rowID, multi)">
+	onRowSelect(rowID);
+</script>
+
+<script language="jscript" for="grid" event="GridDoubleClick(rowId)">
+  doDoubleClick(rowId);
+</script>
+
+<script language="jscript" for="grid" event="GridLinkClick(strLink)">
+	eval("onLink("+strLink+")");
+</script>
+
+<table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
+  <tr>
+   <td style="border-left: 1 solid #FFFFFF; border-right: 1 solid #333333" valign="top" id="toolbar_slot" height="30">
+        <comment id="toolbar_commented">
+<object id="toolbar"
+			      style="width:100%; height:28px;"
+			      classid="../cbin/Toolbar.dll#Aras.Client.Controls.Toolbar">
+        </object>
+</comment>
+<script>
+WriteUncommentedObject("toolbar_commented");
+</script>
+   </td>
+  </tr>
+ <tr>
+  <td valign="top">
+		<comment id="grid_commented">
+<object id="grid" class="loadingAppletStyle"
+    	classid="../cbin/TreeTable.dll#Aras.Client.Controls.GridContainer" >
+		</object>
+</comment>
+<script>
+WriteUncommentedObject("grid_commented");
+</script>
+
+  </td>
+ </tr>
+
+</table>
+
+</body>
+</html>
+

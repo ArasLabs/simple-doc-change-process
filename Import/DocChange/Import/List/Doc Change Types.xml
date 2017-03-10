@@ -1,0 +1,20 @@
+﻿<AML>
+ <Item type="List" id="9986D0E6F4C44923A9A4ACE581E8260D" action="add">
+  <description>Varian</description>
+  <name>Doc Change Types</name>
+  <Relationships>
+   <Item type="Value" id="876012C811E54F3BA782769623FEE680" action="add">
+    <label xml:lang="en">First Release</label>
+    <sort_order>10</sort_order>
+    <source_id keyed_name="Doc Change Types" type="List">9986D0E6F4C44923A9A4ACE581E8260D</source_id>
+    <value>first_release</value>
+   </Item>
+   <Item type="Value" id="B25C7A508B7644E2AFEB26F3A4D75DDB" action="add">
+    <label xml:lang="en">New Revision Release</label>
+    <sort_order>20</sort_order>
+    <source_id keyed_name="Doc Change Types" type="List">9986D0E6F4C44923A9A4ACE581E8260D</source_id>
+    <value>new_rev_release</value>
+   </Item>
+  </Relationships>
+ </Item>
+</AML>

@@ -1,0 +1,191 @@
+﻿<AML>
+ <Item type="ItemType" id="9F7A720337204BA196314A9C1E9EE57A" action="add">
+  <allow_private_permission>1</allow_private_permission>
+  <auto_search>0</auto_search>
+  <default_lifecycle keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</default_lifecycle>
+  <hide_where_used>0</hide_where_used>
+  <implementation_type>table</implementation_type>
+  <instance_data>DOC_CHANGE</instance_data>
+  <is_dependent>0</is_dependent>
+  <is_relationship>0</is_relationship>
+  <is_versionable>0</is_versionable>
+  <label xml:lang="en">Doc Change</label>
+  <label_plural xml:lang="en">Doc Changes</label_plural>
+  <large_icon>../images/Icons/32x32/32x32_signit.gif</large_icon>
+  <manual_versioning>0</manual_versioning>
+  <name>Doc Change</name>
+  <open_icon>../images/Icons/16x16/16x16_shortcut.gif</open_icon>
+  <revisions keyed_name="Default" type="Revision">7FE395DD8B9F4E1090756A34B733D75E</revisions>
+  <save_history>1</save_history>
+  <show_parameters_tab>1</show_parameters_tab>
+  <structure_view>tab view</structure_view>
+  <unlock_on_logout>0</unlock_on_logout>
+  <use_src_access>0</use_src_access>
+  <Relationships>
+   <Item type="Allowed Permission" id="0E84EFD8C7B14698ACBBAF50FCEBCAC1" action="add">
+    <is_default>1</is_default>
+    <related_id keyed_name="New Doc Change" type="Permission">54C383E13D1D4AEC9EF10E375A3A7313</related_id>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Allowed Workflow" id="0741368035D3477DB5A8A6F22F2AD644" action="add">
+    <is_default>1</is_default>
+    <related_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</related_id>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Can Add" id="6E449AD6CF6E465E85F88390E33A568B" action="add">
+    <can_add>1</can_add>
+    <related_id keyed_name="DocChange Management" type="Identity">E839B38E08D44AB499777C05A59DC37D</related_id>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Property" id="7C61BC669B454D0FB0BA7D9D437E99A5" action="add">
+    <column_alignment>left</column_alignment>
+    <data_type>text</data_type>
+    <is_hidden>1</is_hidden>
+    <is_hidden2>1</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <label xml:lang="en">Description</label>
+    <name>description</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>3456</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Property" id="9D106049C5484BADBBBF23A93F28AD6C" action="add">
+    <column_alignment>left</column_alignment>
+    <column_width>300</column_width>
+    <data_type>string</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>0</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <keyed_name_order>2</keyed_name_order>
+    <label xml:lang="en">Doc Change Title</label>
+    <name>doc_change_title</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>1900</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+    <stored_length>128</stored_length>
+   </Item>
+   <Item type="Property" id="DF123139F99A4696B230FDD50D10E512" action="add">
+    <column_alignment>left</column_alignment>
+    <column_width>100</column_width>
+    <data_source keyed_name="Doc Change Types">9986D0E6F4C44923A9A4ACE581E8260D</data_source>
+    <data_type>list</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>1</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <label xml:lang="en">Doc Change Type</label>
+    <name>doc_change_type</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>1910</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Property" id="206E4CFA2EF940409972CFD755F61DE4" action="add">
+    <column_alignment>left</column_alignment>
+    <data_type>date</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>1</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <label xml:lang="en">Release Date</label>
+    <name>release_date</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>3584</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="TOC Access" id="2F5E17DF1106461FA3E8AABDDE694596" action="add">
+    <category>Change Management</category>
+    <related_id keyed_name="DocChange Management" type="Identity">E839B38E08D44AB499777C05A59DC37D</related_id>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="View" id="10C45601C70149FB80EFDF31F412B1F8" action="add">
+    <client>js</client>
+    <related_id keyed_name="Doc Change" type="Form">FA0E9B6EDF7F44C4BA927EB4B6825D4B</related_id>
+    <role keyed_name="World" type="Identity">
+     <Item type="Identity" action="get" select="id">
+      <name>World</name>
+     </Item>
+    </role>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+    <type>default</type>
+   </Item>
+  </Relationships>
+ </Item>
+ <Item type="ItemType" id="9F7A720337204BA196314A9C1E9EE57A" action="edit">
+  <Relationships>
+   <Item type="Property" id="D00CBA9FD9544C7CA4D366F5F4D7E7AD" action="add">
+    <column_alignment>left</column_alignment>
+    <column_width>100</column_width>
+    <data_source keyed_name="DocChange Numbers">F2EF3037853E40DFA2E977C8E11A2C20</data_source>
+    <data_type>sequence</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>0</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>1</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <keyed_name_order>1</keyed_name_order>
+    <label xml:lang="en">Doc Change Number</label>
+    <name>doc_change_number</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>1850</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Property" action="edit" where="source_id='9F7A720337204BA196314A9C1E9EE57A' and name='owned_by_id'">
+    <column_alignment>left</column_alignment>
+    <column_width>150</column_width>
+    <data_source keyed_name="Identity" type="ItemType" name="Identity">E582AB17663F4EF28460015B2BE9E094</data_source>
+    <data_type>item</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>1</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <item_behavior>float</item_behavior>
+    <label xml:lang="en">Change Owner</label>
+    <name>owned_by_id</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>0</readonly>
+    <sort_order>2000</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+   </Item>
+   <Item type="Property" action="edit" where="source_id='9F7A720337204BA196314A9C1E9EE57A' and name='state'">
+    <column_alignment>left</column_alignment>
+    <column_width>100</column_width>
+    <data_type>string</data_type>
+    <is_hidden>0</is_hidden>
+    <is_hidden2>0</is_hidden2>
+    <is_indexed>0</is_indexed>
+    <is_keyed>0</is_keyed>
+    <is_multi_valued>0</is_multi_valued>
+    <is_required>0</is_required>
+    <name>state</name>
+    <range_inclusive>0</range_inclusive>
+    <readonly>1</readonly>
+    <sort_order>1408</sort_order>
+    <source_id keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</source_id>
+    <stored_length>32</stored_length>
+   </Item>
+  </Relationships>
+ </Item>
+</AML>

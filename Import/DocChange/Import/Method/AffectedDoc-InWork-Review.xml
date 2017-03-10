@@ -1,0 +1,19 @@
+﻿<AML>
+ <Item type="Method" id="0A7854DD415C4BEA92CFCDDABFA957DC" action="add">
+  <comments>starts Affected Doc Promotion with parameters</comments>
+  <method_code><![CDATA[' NOTE: promition transition must be a valid transistion on the
+'       "Doc Change" lifecycle map!!!  format = "<from>,<to>"
+Dim lifecycleTransition As String = "In Work,In Review"
+
+
+Dim doc_changeId As String = Me.getId()
+Dim innovator As Aras.IOM.Innovator = Me.getInnovator()
+
+Dim body As String = String.Format("<body changeType='{0}' changeId='{1}' lcTransition='{2}'/>","Doc Change", doc_changeId, lifecycleTransition)
+
+Return innovator.applyMethod("Affected Doc Promotion", body)
+]]></method_code>
+  <method_type>VB</method_type>
+  <name>AffectedDoc-InWork-Review</name>
+ </Item>
+</AML>

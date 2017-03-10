@@ -1,0 +1,604 @@
+﻿<AML>
+ <Item type="Workflow Map" id="A2E2EA746A0143938D5E06B94F81EEEF" action="add">
+  <description>Doc changes workflow</description>
+  <name>Doc Change</name>
+  <node_bg_color></node_bg_color>
+  <node_label1_color></node_label1_color>
+  <node_label1_font></node_label1_font>
+  <node_label2_color></node_label2_color>
+  <node_label2_font></node_label2_font>
+  <node_name_color></node_name_color>
+  <node_name_font></node_name_font>
+  <node_size></node_size>
+  <process_owner keyed_name="Owner" type="Identity">
+   <Item type="Identity" action="get" select="id">
+    <name>Owner</name>
+   </Item>
+  </process_owner>
+  <transition_line_color></transition_line_color>
+  <transition_name_color></transition_name_color>
+  <transition_name_font></transition_name_font>
+  <Relationships>
+   <Item type="Workflow Map Activity" id="616B5F199AF04C00970C46A94A7CF10D" action="add">
+    <related_id keyed_name="Doc Approval (CRB)" type="Activity Template">
+     <Item type="Activity Template" id="0D14B85E88D945529B292E16789D693D" action="add">
+      <can_delegate>1</can_delegate>
+      <can_refuse>1</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <icon>../images/Icons/20x20/20x22_gray_ball.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>0</is_end>
+      <is_start>0</is_start>
+      <message>Please Review...</message>
+      <name>Doc Approval (CRB)</name>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>0</wait_for_all_votes>
+      <x>518</x>
+      <y>101</y>
+      <Relationships>
+       <Item type="Activity Template Assignment" id="9FE687D4EC81492181AD046B34A72A8F" action="add">
+        <for_all_members>1</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="Doc Change Review Board" type="Identity">D62CD29EBA1044FA9D71AB6CA407E8EF</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Approval (CRB)" type="Activity Template">0D14B85E88D945529B292E16789D693D</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template Assignment" id="3CF6AD26FBBB459BB82614AFCE312281" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="Owner" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Owner</name>
+         </Item>
+        </related_id>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Doc Approval (CRB)" type="Activity Template">0D14B85E88D945529B292E16789D693D</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Workflow Map Path" id="19BC67E93E14409689F10930F500049C" action="add">
+        <authentication>password</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Approve</name>
+        <related_id>27EEA145C57E40B4BF8B9775398D9503</related_id>
+        <segments></segments>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Approval (CRB)" type="Activity Template">0D14B85E88D945529B292E16789D693D</source_id>
+        <x>20</x>
+        <y>-3</y>
+       </Item>
+      </Relationships>
+     </Item>
+    </related_id>
+    <sort_order>768</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item>
+  
+   <Item type="Workflow Map Activity" id="D138ED574A644339903C152CB3617B9D" action="add">
+    <related_id keyed_name="Doc Review" type="Activity Template">
+     <Item type="Activity Template" id="97924F4992A7459B8FB136628BABF78E" action="add">
+      <can_delegate>1</can_delegate>
+      <can_refuse>1</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <escalate_to keyed_name="Owner" type="Identity">
+       <Item type="Identity" action="get" select="id">
+        <name>Owner</name>
+       </Item>
+      </escalate_to>
+      <icon>../images/Icons/20x20/20x22_gray_ball.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>0</is_end>
+      <is_start>0</is_start>
+      <message>Please Review...</message>
+      <name>Doc Review</name>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>0</wait_for_all_votes>
+      <x>399</x>
+      <y>101</y>
+      <Relationships>
+       <Item type="Activity Template Assignment" id="11B7D9B449FB43F2974C6D6F2740692A" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="[affected item Managers]" type="Identity">65D9A7C6C6854ADD9B66865D005376E7</related_id>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <voting_weight>80</voting_weight>
+       </Item>
+       <Item type="Activity Template Assignment" id="71191AA85ED4487AB82BCED22C2703AF" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="[affected item Owners]" type="Identity">664B11A4312140A680028E05BE92E88A</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <voting_weight>80</voting_weight>
+       </Item>
+       <Item type="Activity Template Assignment" id="870469C1134E432EA772D6D8736E876B" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>1</is_required>
+        <related_id keyed_name="Owner" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Owner</name>
+         </Item>
+        </related_id>
+        <sort_order>384</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template EMail" id="B4FAAFCF9186406FB7434A73D13EF3B3" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="CM Activity Notification" type="EMail Message">D7DED4DE50BA4CD4817B4B4638C1CD78</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <target>all_assignments</target>
+       </Item>
+       <Item type="Activity Template Method" id="F49FA9BFB6FB445684529F11E7102835" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="Dynamic DocChange WF Assignments" type="Method">
+         <Item type="Method" action="get" select="id">
+          <name>Dynamic DocChange WF Assignments</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+       </Item>
+       <Item type="Activity Template Transition" id="D69324007FE94A90BB01D2C1A06ACE89" action="add">
+        <controlled_itemtype keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</controlled_itemtype>
+        <event>on_activate</event>
+        <related_id keyed_name="8FF5E58A7718442DB1CD6F32175C9902" type="Life Cycle Transition">8FF5E58A7718442DB1CD6F32175C9902</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+       </Item>
+       <Item type="Workflow Map Path" id="F125223058554AACAF45743DA03BF527" action="add">
+        <authentication>none</authentication>
+        <is_default>1</is_default>
+        <is_override>0</is_override>
+        <name>Need approval</name>
+        <related_id>0D14B85E88D945529B292E16789D693D</related_id>
+        <segments></segments>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <x>14</x>
+        <y>-6</y>
+       </Item>
+       <Item type="Workflow Map Path" id="D8023E0A0F59459F97885152B1922BCC" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Reject</name>
+        <related_id>0410F90F4CB2496EBC3F4B9430073A7C</related_id>
+        <segments>405,167</segments>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <x>-4</x>
+        <y>67</y>
+       </Item>
+       <Item type="Workflow Map Path" id="DF20AC509F56472D8BB450FE761406CB" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>release without approval</name>
+        <related_id>27EEA145C57E40B4BF8B9775398D9503</related_id>
+        <segments>512,178</segments>
+        <sort_order>384</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <x>126</x>
+        <y>93</y>
+       </Item>
+       <Item type="Workflow Map Path" id="5B9B56C8804E4C769DCC01DE8D5DB591" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Re-work</name>
+        <related_id>C47495BA0C504910958CB13BFFBC8A40</related_id>
+        <segments>294,150</segments>
+        <sort_order>512</sort_order>
+        <source_id keyed_name="Doc Review" type="Activity Template">97924F4992A7459B8FB136628BABF78E</source_id>
+        <x>-135</x>
+        <y>27</y>
+       </Item>
+      </Relationships>
+     </Item>
+    </related_id>
+    <sort_order>384</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item>
+   <Item type="Workflow Map Activity" id="CBEBA69CD19F4B9C8F0E62069E4DC595" action="add">
+    <related_id keyed_name="Draft Changes" type="Activity Template">
+     <Item type="Activity Template" id="C47495BA0C504910958CB13BFFBC8A40" action="add">
+      <can_delegate>1</can_delegate>
+      <can_refuse>1</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <icon>../images/Icons/20x20/20x22_gray_ball.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>0</is_end>
+      <is_start>0</is_start>
+      <message>Please Review...</message>
+      <name>Draft Changes</name>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>0</wait_for_all_votes>
+      <x>159</x>
+      <y>104</y>
+      <Relationships>
+       <Item type="Activity Template Assignment" id="B592FA4E2257419A84E1790E4B89EC7A" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="[affected item Owners]" type="Identity">664B11A4312140A680028E05BE92E88A</related_id>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template Assignment" id="3B5E116FDCAB4BC58F0268024A3488A9" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="Owner" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Owner</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template EMail" id="574B6377378748958427EB0B79479E48" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="CM Activity Notification" type="EMail Message">D7DED4DE50BA4CD4817B4B4638C1CD78</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+        <target>all_assignments</target>
+       </Item>
+       <Item type="Activity Template Method" id="9C488DC03A1F4D2C91366EBF5F082C8D" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="Dynamic DocChange WF Assignments" type="Method">
+         <Item type="Method" action="get" select="id">
+          <name>Dynamic DocChange WF Assignments</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+       </Item>
+       <Item type="Activity Template Task" id="6AD6DF9637D049C3A4B06D4AE9476161" action="add">
+        <description>Optionally, you may want to convert latest document file versions to PDF and attached these PDF files to the document, as well.</description>
+        <is_required>0</is_required>
+        <sequence>2</sequence>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+       </Item>
+       <Item type="Activity Template Task" id="9F3A931E49F740E1A301A3B9BD24E693" action="add">
+        <description>Ensure all updated versions of attached document files are checked-in !</description>
+        <is_required>1</is_required>
+        <sequence>1</sequence>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+       </Item>
+       <Item type="Activity Template Transition" id="BD05D39545D745D2A7A2FEFF3978E0DF" action="add">
+        <controlled_itemtype keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</controlled_itemtype>
+        <event>on_activate</event>
+        <related_id keyed_name="6CF52904223E4684B8EDE6F80B3C0BDE" type="Life Cycle Transition">6CF52904223E4684B8EDE6F80B3C0BDE</related_id>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+       </Item>
+       <Item type="Activity Template Transition" id="5BD83D2B658A4C0CAC3A27BA37D54A31" action="add">
+        <controlled_itemtype keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</controlled_itemtype>
+        <event>on_activate</event>
+        <related_id keyed_name="FA91B2F5CF71431FAA8182C3660E050F" type="Life Cycle Transition">FA91B2F5CF71431FAA8182C3660E050F</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+       </Item>
+       <Item type="Workflow Map Path" id="1DB419AD9FF74725BC9969558148ADAF" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Fast track</name>
+        <related_id>414AB5FC33244944B1B7D573B97B7D22</related_id>
+        <segments></segments>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+        <x>99</x>
+        <y>-44</y>
+       </Item>
+      
+       <Item type="Workflow Map Path" id="03E7C02BFA784E4A8AB198BCB443C6C7" action="add">
+        <authentication>none</authentication>
+        <is_default>1</is_default>
+        <is_override>1</is_override>
+        <name>Review</name>
+        <related_id>97924F4992A7459B8FB136628BABF78E</related_id>
+        <segments></segments>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Draft Changes" type="Activity Template">C47495BA0C504910958CB13BFFBC8A40</source_id>
+        <x>102</x>
+        <y>-5</y>
+       </Item></Relationships>
+     </Item>
+    </related_id>
+    <sort_order>256</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item>
+   <Item type="Workflow Map Activity" id="A99B5122BB38434B86B7466ABE373F21" action="add">
+    <related_id keyed_name="End" type="Activity Template">
+     <Item type="Activity Template" id="27EEA145C57E40B4BF8B9775398D9503" action="add">
+      <can_delegate>0</can_delegate>
+      <can_refuse>0</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <expected_duration>0</expected_duration>
+      <icon>../images/Icons/20x20/20x20_checkmark.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>1</is_end>
+      <is_start>0</is_start>
+      <message>Workflow End</message>
+      <name>End</name>
+      <priority>1</priority>
+      <reminder_count>0</reminder_count>
+      <reminder_interval>0</reminder_interval>
+      <timeout_duration>0</timeout_duration>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>0</wait_for_all_votes>
+      <x>657</x>
+      <y>100</y>
+      <Relationships>
+       <Item type="Activity Template EMail" id="8ABF2A244EF94614BA127B5F0F6EA327" action="add">
+        <alternate_identity keyed_name="Owner" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Owner</name>
+         </Item>
+        </alternate_identity>
+        <event>on_activate</event>
+        <related_id keyed_name="CM Activity Notification" type="EMail Message">D7DED4DE50BA4CD4817B4B4638C1CD78</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="End" type="Activity Template">27EEA145C57E40B4BF8B9775398D9503</source_id>
+        <target>alternate</target>
+       </Item>
+       <Item type="Activity Template Transition" id="4110C0BEC7DE4E11A5DDD7D8658E1906" action="add">
+        <controlled_itemtype keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</controlled_itemtype>
+        <event>on_activate</event>
+        <related_id keyed_name="A7FFDFD3DFF74DEBBF8CD8177ACAA3D6" type="Life Cycle Transition">A7FFDFD3DFF74DEBBF8CD8177ACAA3D6</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="End" type="Activity Template">27EEA145C57E40B4BF8B9775398D9503</source_id>
+       </Item>
+      </Relationships>
+     </Item>
+    </related_id>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item>
+   <Item type="Workflow Map Activity" id="69D805DC42F14D94846692FE5670A295" action="add">
+    <related_id keyed_name="Fast Track Approval" type="Activity Template">
+     <Item type="Activity Template" id="414AB5FC33244944B1B7D573B97B7D22" action="add">
+      <can_delegate>1</can_delegate>
+      <can_refuse>1</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <escalate_to keyed_name="CM" type="Identity">F6624E9AE5504958A84E4B6A5831298B</escalate_to>
+      <icon>../images/Icons/20x20/20x22_gray_ball.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>0</is_end>
+      <is_start>0</is_start>
+      <message>Please Review...</message>
+      <name>Fast Track Approval</name>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>0</wait_for_all_votes>
+      <x>335</x>
+      <y>1</y>
+      <Relationships>
+       <Item type="Activity Template Assignment" id="CD1FFC91CDB84856BABF1D0A0BD7B4CD" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="Owner" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Owner</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Fast Track Approval" type="Activity Template">414AB5FC33244944B1B7D573B97B7D22</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template EMail" id="11924105612A4BC1AA273FD5984594EB" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="CM Activity Notification" type="EMail Message">D7DED4DE50BA4CD4817B4B4638C1CD78</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Fast Track Approval" type="Activity Template">414AB5FC33244944B1B7D573B97B7D22</source_id>
+        <target>all_assignments</target>
+       </Item>
+       <Item type="Activity Template Transition" id="5449D986EA554C77A6CB292E61836BAD" action="add">
+        <controlled_itemtype keyed_name="Doc Change" type="ItemType" name="Doc Change">9F7A720337204BA196314A9C1E9EE57A</controlled_itemtype>
+        <event>on_activate</event>
+        <related_id keyed_name="8FF5E58A7718442DB1CD6F32175C9902" type="Life Cycle Transition">8FF5E58A7718442DB1CD6F32175C9902</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Fast Track Approval" type="Activity Template">414AB5FC33244944B1B7D573B97B7D22</source_id>
+       </Item>
+       <Item type="Workflow Map Path" id="EFEA0DCC9135463D99C0BCB79BDE117E" action="add">
+        <authentication>password</authentication>
+        <is_default>1</is_default>
+        <is_override>0</is_override>
+        <name>Fast approve</name>
+        <related_id>27EEA145C57E40B4BF8B9775398D9503</related_id>
+        <segments></segments>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Fast Track Approval" type="Activity Template">414AB5FC33244944B1B7D573B97B7D22</source_id>
+        <x>121</x>
+        <y>38</y>
+       </Item>
+       <Item type="Workflow Map Path" id="5EAE46F9ED9040A78A074C0E052D69D6" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Review</name>
+        <related_id>97924F4992A7459B8FB136628BABF78E</related_id>
+        <segments></segments>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Fast Track Approval" type="Activity Template">414AB5FC33244944B1B7D573B97B7D22</source_id>
+        <x>35</x>
+        <y>53</y>
+       </Item>
+       <Item type="Workflow Map Path" id="F646ED8E21CF4EAFB42DD9C757044D12" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Re-Work</name>
+        <related_id>C47495BA0C504910958CB13BFFBC8A40</related_id>
+        <segments>240,26</segments>
+        <sort_order>384</sort_order>
+        <source_id keyed_name="Fast Track Approval" type="Activity Template">414AB5FC33244944B1B7D573B97B7D22</source_id>
+        <x>-171</x>
+        <y>24</y>
+       </Item>
+      </Relationships>
+     </Item>
+    </related_id>
+    <sort_order>512</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item>
+   <Item type="Workflow Map Activity" id="D5741EA6D12949FBA6E58B7CF8AD6043" action="add">
+    <related_id keyed_name="Review Rejects" type="Activity Template">
+     <Item type="Activity Template" id="0410F90F4CB2496EBC3F4B9430073A7C" action="add">
+      <can_delegate>1</can_delegate>
+      <can_refuse>1</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <escalate_to keyed_name="CM" type="Identity">F6624E9AE5504958A84E4B6A5831298B</escalate_to>
+      <icon>../images/Icons/20x20/20x22_gray_ball.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>0</is_end>
+      <is_start>0</is_start>
+      <message>Please Review...</message>
+      <name>Review Rejects</name>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>1</wait_for_all_votes>
+      <x>330</x>
+      <y>216</y>
+      <Relationships>
+       <Item type="Activity Template Assignment" id="BDAEF56D7FC248B5941DAFE0C17D8C00" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="[affected item Managers]" type="Identity">65D9A7C6C6854ADD9B66865D005376E7</related_id>
+        <sort_order>384</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template Assignment" id="9CB8AC0BB7AE4301999F2B54B1EC55A5" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="[affected item Owners]" type="Identity">664B11A4312140A680028E05BE92E88A</related_id>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template Assignment" id="AC6148C7C6FE4CB4B5EDAEB702F8D994" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="Owner" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Owner</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template EMail" id="F0B5D5B7A5BF4EDEAB8E27C73F6C8D85" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="CM Activity Notification" type="EMail Message">D7DED4DE50BA4CD4817B4B4638C1CD78</related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+        <target>all_assignments</target>
+       </Item>
+       <Item type="Activity Template Method" id="4D61AEE2BB41408BB0E4C816FCAEF2E2" action="add">
+        <event>on_activate</event>
+        <related_id keyed_name="Dynamic DocChange WF Assignments" type="Method">
+         <Item type="Method" action="get" select="id">
+          <name>Dynamic DocChange WF Assignments</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+       </Item>
+       <Item type="Workflow Map Path" id="DC101C21FE9B4E6D9E755D0B9456288F" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Back to review</name>
+        <related_id>97924F4992A7459B8FB136628BABF78E</related_id>
+        <segments>357,152</segments>
+        <sort_order>256</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+        <x>-73</x>
+        <y>-41</y>
+       </Item>
+      
+       <Item type="Workflow Map Path" id="8F5A08D618164E499F02526E054D8566" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>1</is_override>
+        <name>Re-work</name>
+        <related_id>C47495BA0C504910958CB13BFFBC8A40</related_id>
+        <segments></segments>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Review Rejects" type="Activity Template">0410F90F4CB2496EBC3F4B9430073A7C</source_id>
+        <x>-103</x>
+        <y>-1</y>
+       </Item></Relationships>
+     </Item>
+    </related_id>
+    <sort_order>640</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item>
+   <Item type="Workflow Map Activity" id="CEC084993DC8455799DD6F22D7ECD709" action="add">
+    <related_id keyed_name="Start" type="Activity Template">
+     <Item type="Activity Template" id="284B43766E4D4F8FB7FCDD23DAF152B8" action="add">
+      <can_delegate>0</can_delegate>
+      <can_refuse>0</can_refuse>
+      <consolidate_ondelegate>0</consolidate_ondelegate>
+      <expected_duration>0</expected_duration>
+      <icon>../images/Icons/16x16/16x16_arrow_right.gif</icon>
+      <is_auto>0</is_auto>
+      <is_end>0</is_end>
+      <is_start>1</is_start>
+      <message>Workflow Start</message>
+      <name>Start</name>
+      <priority>2</priority>
+      <reminder_count>0</reminder_count>
+      <reminder_interval>0</reminder_interval>
+      <timeout_duration>0</timeout_duration>
+      <wait_for_all_inputs>0</wait_for_all_inputs>
+      <wait_for_all_votes>0</wait_for_all_votes>
+      <x>22</x>
+      <y>103</y>
+      <Relationships>
+       <Item type="Activity Template Assignment" id="AE22F164980E42EDB2ADF65C33817EC6" action="add">
+        <for_all_members>0</for_all_members>
+        <is_required>0</is_required>
+        <related_id keyed_name="Creator" type="Identity">
+         <Item type="Identity" action="get" select="id">
+          <name>Creator</name>
+         </Item>
+        </related_id>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Start" type="Activity Template">284B43766E4D4F8FB7FCDD23DAF152B8</source_id>
+        <voting_weight>100</voting_weight>
+       </Item>
+       <Item type="Activity Template Task" id="B64DA2423B494DA4A84F3300DCBA39B3" action="add">
+        <description>If somebody else should own the change process, then assign a different "Doc Change Owner"</description>
+        <is_required>1</is_required>
+        <sequence>1</sequence>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Start" type="Activity Template">284B43766E4D4F8FB7FCDD23DAF152B8</source_id>
+       </Item>
+       <Item type="Workflow Map Path" id="B5B6580ED5A84023B1091E19D3353F78" action="add">
+        <authentication>none</authentication>
+        <is_default>0</is_default>
+        <is_override>0</is_override>
+        <name>Set revision</name>
+        <related_id>C47495BA0C504910958CB13BFFBC8A40</related_id>
+        <segments></segments>
+        <sort_order>128</sort_order>
+        <source_id keyed_name="Start" type="Activity Template">284B43766E4D4F8FB7FCDD23DAF152B8</source_id>
+        <x>47</x>
+        <y>-1</y>
+       </Item>
+      </Relationships>
+     </Item>
+    </related_id>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="Workflow Map">A2E2EA746A0143938D5E06B94F81EEEF</source_id>
+   </Item></Relationships>
+ </Item>
+</AML>

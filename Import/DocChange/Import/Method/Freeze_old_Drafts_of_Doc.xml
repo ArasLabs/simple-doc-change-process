@@ -1,0 +1,86 @@
+﻿<AML>
+ <Item type="Method" id="E727D9681F5941BFBDD4C40398C6184C" action="add">
+  <method_code><![CDATA[' Server side Method (VB): Freeze_Draft_of_Doc
+' triggerd from: onAfterVersion
+' attached to: ItemType = Document
+'
+' if a new generation of document is created and if previous status was "Draft"
+'  (or "Preliminary") 
+' then promote status to "Draft (frozen)"  
+' (this Status must added To the Document's life cycle map with a transition from
+'  Draft or Preliminary)
+'
+' This new status must also be defining a state permission without "update" permissions"
+' (you can use "Released Document" permission for this)
+' This will now prevent further modifications To old draft versions.
+'
+' last modified: 27-Oct-2008
+'
+'System.Diagnostics.Debugger.Break() 
+
+Dim plmIdentity As Aras.Server.Security.Identity
+Dim PermissionWasSet As Boolean = False
+
+Dim innovator As Aras.IOM.Innovator = Me.newInnovator()
+Dim thisErr As Aras.IOM.Item = Nothing
+Dim qry As Aras.IOM.Item
+Dim tempItem As Aras.IOM.Item
+' NOTE: this gets the document generation before the version action (not the lates
+'       exactly the one we want to freeze, if state is "Draft"
+Dim docId As String = Me.getId()
+Dim this_docGeneration As String = Me.getProperty("generation","")
+Dim this_docState As String = Me.getProperty("state","")
+Dim this_configId As String = Me.getProperty("config_id","")
+
+If this_docState <> "" And (this_docState = "Draft" Or this_docState = "Preliminary") Then
+  Dim wasLocked As Boolean = False
+  '
+  qry = Me.newItem("Document","unlock")
+  qry.setId(docId)
+  qry.setAttribute ("version","0")
+  qry = qry.apply()
+  If (Not qry.isError()) Then
+     wasLocked = True
+  End If
+
+  plmIdentity = Aras.Server.Security.Identity.GetByName("Aras PLM")
+  PermissionWasSet = Aras.Server.Security.Permissions.GrantIdentity(plmIdentity)
+  
+  '''''''''''''''''''''''''''''''''''
+  ' promote draft and preliminary documents to "Draft (frozen)
+  tempItem = Me.newItem("Document","promoteItem")
+  tempItem.setId(docId)
+  tempItem.setAttribute ("version","0")
+  tempItem.setProperty("state","Draft (frozen)")
+  tempItem = tempItem.apply()
+  If (tempItem.isError()) Then
+    thisErr = innovator.newError("Error promoting affected Document: " & tempItem.getErrorDetail())
+    Goto Freeze_old_Drafts_of_Doc_Return
+  End If
+  
+  If wasLocked Then  ' lock again
+    qry = Me.newItem("Document","lock")
+    qry.setId(docId)
+    qry.setAttribute ("version","0")
+    qry = qry.apply()
+  End If
+
+End If
+
+Freeze_old_Drafts_of_Doc_Return:
+'reset
+If (PermissionWasSet=True)	Then
+	Aras.Server.Security.Permissions.RevokeIdentity(plmIdentity)
+End If
+
+' finished
+If thisErr Is Nothing Then
+  Return Me
+Else
+  Return thisErr
+End If
+]]></method_code>
+  <method_type>VB</method_type>
+  <name>Freeze_old_Drafts_of_Doc</name>
+ </Item>
+</AML>

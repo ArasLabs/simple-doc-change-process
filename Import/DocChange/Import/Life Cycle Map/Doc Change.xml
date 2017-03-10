@@ -1,0 +1,149 @@
+﻿<AML>
+ <Item type="Life Cycle Map" id="858E58137335456BB96934BAD479F099" action="add">
+  <name>Doc Change</name>
+  <start_state keyed_name="New" type="Life Cycle State">5F4D813CBABD4C2E92CC88B3818754AE</start_state>
+  <Relationships>
+   <Item type="Life Cycle State" id="E89C7EB1598244BFBC44100B525A16B2" action="add">
+    <image>../images/Icons/16x16/16x16_redx.gif</image>
+    <name>Cancelled</name>
+    <set_is_released>0</set_is_released>
+    <set_not_lockable>0</set_not_lockable>
+    <sort_order>640</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <x>518</x>
+    <y>146</y>
+   </Item>
+   <Item type="Life Cycle State" id="D0B769832E2548C0800F8E2F2031E923" action="add">
+    <image>../images/Icons/20x20/20x20_checkmark.gif</image>
+    <name>Closed</name>
+    <set_is_released>0</set_is_released>
+    <set_not_lockable>0</set_not_lockable>
+    <sort_order>512</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <x>527</x>
+    <y>47</y>
+   </Item>
+   <Item type="Life Cycle State" id="309421402733411BBDEF7E8F45E09CF2" action="add">
+    <image>../images/icons/20x20/20x15_lifecycle.gif</image>
+    <name>In Review</name>
+    <set_is_released>0</set_is_released>
+    <set_not_lockable>0</set_not_lockable>
+    <sort_order>384</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <x>353</x>
+    <y>46</y>
+   </Item>
+   <Item type="Life Cycle State" id="25B208142BE04242B1F5B81BE5EDB41C" action="add">
+    <image>../images/icons/20x20/20x15_lifecycle.gif</image>
+    <name>In Work</name>
+    <set_is_released>0</set_is_released>
+    <set_not_lockable>0</set_not_lockable>
+    <sort_order>256</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <x>196</x>
+    <y>47</y>
+   </Item>
+   <Item type="Life Cycle State" id="5F4D813CBABD4C2E92CC88B3818754AE" action="add">
+    <image>../images/icons/20x20/20x15_lifecycle.gif</image>
+    <name>New</name>
+    <set_is_released>0</set_is_released>
+    <set_not_lockable>0</set_not_lockable>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <x>43</x>
+    <y>47</y>
+   </Item>
+   <Item type="Life Cycle Transition" id="DEC17E8D5F934FE1BF6D4E76B76A9C1E" action="add">
+    <from_state keyed_name="In Review" type="Life Cycle State">309421402733411BBDEF7E8F45E09CF2</from_state>
+    <get_comment>0</get_comment>
+    <role keyed_name="CM and ArasPLM" type="Identity">348180D7A85743848B57E1405D71204E</role>
+    <segments></segments>
+    <sort_order>512</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <to_state keyed_name="Cancelled" type="Life Cycle State">E89C7EB1598244BFBC44100B525A16B2</to_state>
+    <x>104</x>
+    <y>60</y>
+   </Item>
+   <Item type="Life Cycle Transition" id="A7FFDFD3DFF74DEBBF8CD8177ACAA3D6" action="add">
+    <from_state keyed_name="In Review" type="Life Cycle State">309421402733411BBDEF7E8F45E09CF2</from_state>
+    <get_comment>0</get_comment>
+    <post_action keyed_name="Set Release Date" type="Method">
+     <Item type="Method" action="get" select="id">
+      <name>Set Release Date</name>
+     </Item>
+    </post_action>
+    <pre_action keyed_name="AffectedDoc-Review-Closed" type="Method">
+     <Item type="Method" action="get" select="id">
+      <name>AffectedDoc-Review-Closed</name>
+     </Item>
+    </pre_action>
+    <role keyed_name="CM and ArasPLM" type="Identity">348180D7A85743848B57E1405D71204E</role>
+    <segments></segments>
+    <sort_order>384</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <to_state keyed_name="Closed" type="Life Cycle State">D0B769832E2548C0800F8E2F2031E923</to_state>
+    <x>44</x>
+    <y>16</y>
+   </Item>
+   <Item type="Life Cycle Transition" id="6CF52904223E4684B8EDE6F80B3C0BDE" action="add">
+    <from_state keyed_name="In Review" type="Life Cycle State">309421402733411BBDEF7E8F45E09CF2</from_state>
+    <get_comment>0</get_comment>
+    <pre_action keyed_name="AffectedDoc-Review-InWork" type="Method">
+     <Item type="Method" action="get" select="id">
+      <name>AffectedDoc-Review-InWork</name>
+     </Item>
+    </pre_action>
+    <role keyed_name="CM and ArasPLM" type="Identity">348180D7A85743848B57E1405D71204E</role>
+    <segments>249,21</segments>
+    <sort_order>640</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <to_state keyed_name="In Work" type="Life Cycle State">25B208142BE04242B1F5B81BE5EDB41C</to_state>
+    <x>-91</x>
+    <y>-32</y>
+   </Item>
+   <Item type="Life Cycle Transition" id="88A0BA9747C847AFB5698C7B9322A3ED" action="add">
+    <from_state keyed_name="In Work" type="Life Cycle State">25B208142BE04242B1F5B81BE5EDB41C</from_state>
+    <get_comment>0</get_comment>
+    <role keyed_name="CM and ArasPLM" type="Identity">348180D7A85743848B57E1405D71204E</role>
+    <segments>265,118</segments>
+    <sort_order>768</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <to_state keyed_name="Cancelled" type="Life Cycle State">E89C7EB1598244BFBC44100B525A16B2</to_state>
+    <x>59</x>
+    <y>91</y>
+   </Item>
+   <Item type="Life Cycle Transition" id="8FF5E58A7718442DB1CD6F32175C9902" action="add">
+    <from_state keyed_name="In Work" type="Life Cycle State">25B208142BE04242B1F5B81BE5EDB41C</from_state>
+    <get_comment>0</get_comment>
+    <pre_action keyed_name="AffectedDoc-InWork-Review" type="Method">
+     <Item type="Method" action="get" select="id">
+      <name>AffectedDoc-InWork-Review</name>
+     </Item>
+    </pre_action>
+    <role keyed_name="CM and ArasPLM" type="Identity">348180D7A85743848B57E1405D71204E</role>
+    <segments>263,59</segments>
+    <sort_order>256</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <to_state keyed_name="In Review" type="Life Cycle State">309421402733411BBDEF7E8F45E09CF2</to_state>
+    <x>30</x>
+    <y>14</y>
+   </Item>
+   <Item type="Life Cycle Transition" id="FA91B2F5CF71431FAA8182C3660E050F" action="add">
+    <from_state keyed_name="New" type="Life Cycle State">5F4D813CBABD4C2E92CC88B3818754AE</from_state>
+    <get_comment>0</get_comment>
+    <pre_action keyed_name="Affected Doc Handling" type="Method">
+     <Item type="Method" action="get" select="id">
+      <name>Affected Doc Handling</name>
+     </Item>
+    </pre_action>
+    <role keyed_name="CM and ArasPLM" type="Identity">348180D7A85743848B57E1405D71204E</role>
+    <segments></segments>
+    <sort_order>128</sort_order>
+    <source_id keyed_name="Doc Change" type="Life Cycle Map">858E58137335456BB96934BAD479F099</source_id>
+    <to_state keyed_name="In Work" type="Life Cycle State">25B208142BE04242B1F5B81BE5EDB41C</to_state>
+    <x>33</x>
+    <y>14</y>
+   </Item>
+  </Relationships>
+ </Item>
+</AML>

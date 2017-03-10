@@ -1,0 +1,150 @@
+﻿<AML>
+ <Item type="Method" id="2B1E4E53AFBB46AD8C9E08FCD32E58DB" action="add">
+  <comments>called with parameters</comments>
+  <method_code><![CDATA[' Server side Method: Affected Doc Promotion
+' triggerd from Doc Change life cycle transitions: 
+'    In Work --> Review
+'    Review --> In Work
+'    Review --> Closed
+'
+' promotes the status of affeced documents listed on a Doc Change
+
+' adapted from AffectedItemPromotion to only work for affected documents.
+'
+' last modified: 24-Oct-2008
+'
+'System.Diagnostics.Debugger.Break() 
+
+Dim body As XmlElement = CType(Me.node.SelectSingleNode("body"), XmlElement)
+
+Dim changeType As String
+If IsNothing(body) Then
+    Return Me.getInnovator().newError("Affected Doc Promotion failed : Missing parameter body.")
+Else
+    changeType = body.GetAttribute("changeType")
+End If
+If changeType = "" Or ChangeType <> "Doc Change" Then
+    Return Me.getInnovator().newError("Affected Doc Promotion only works for 'Doc Change' types !!!")
+End If
+
+' Get the affected item relationships
+Dim doc_changeId As String = body.GetAttribute("changeId")
+Dim change_lcTransition As String = body.GetAttribute("lcTransition")
+
+Dim plmIdentity As Aras.Server.Security.Identity = Aras.Server.Security.Identity.GetByName("Aras PLM")
+Dim PermissionWasSet As Boolean = Aras.Server.Security.Permissions.GrantIdentity(plmIdentity)
+
+Dim innovator As Aras.IOM.Innovator = Me.newInnovator()
+Dim qry As Aras.IOM.Item
+Dim thisErr As Aras.IOM.Item
+Dim i As Integer
+
+qry = Me.newItem("Doc Change Affected Documents","get")
+qry.setProperty("source_id",doc_changeId)
+Dim affRels As Aras.IOM.Item = qry.apply()
+Dim count As Integer = affRels.getItemCount()
+
+' of affected documents found, loop through all relationships
+For i = 0 To count - 1
+  ' Get the affected type
+  Dim thisAffItem As Aras.IOM.Item = affRels.getItemByIndex(i)
+  Dim affectedRelId As String = thisAffItem.getID()
+  Dim affectedId As String = thisAffItem.getProperty("related_id")
+  Dim replacedId As String = thisAffItem.getProperty("replaced_item_id")
+  Dim toState_affected_doc As String
+
+  If (affectedId <> Nothing) Then
+    ' Get the affected Document
+    qry = Me.newItem("Document","get")
+    qry.setId(affectedId)
+    Dim thisItem As Aras.IOM.Item = qry.apply()
+    If (thisItem.isError()) Then
+      thisErr = innovator.newError("Error getting affected Document: " & thisItem.getErrorDetail())
+      Return thisErr
+    End If
+
+    ' update the manual_next_rev with actual rev of the document
+    ' preserve the inital rev of the affected in relationshiop oproperty old_doc_rev
+    Dim docRev As String = thisItem.getProperty("major_rev","")
+       
+    thisAffItem = Me.newItem("Doc Change Affected Documents","edit")
+    thisAffItem.setAttribute("version","0")
+    thisAffItem.setID(affectedRelId)
+    thisAffItem.setProperty("manual_next_rev", docRev )
+    thisAffItem = thisAffItem.apply()
+    If (thisAffItem.isError()) Then
+           thisErr = innovator.newError("cannot set old_doc_rev" & thisAffItem.getErrorDetail())
+           Return thisErr
+    End If
+    thisAffItem = thisAffItem.apply()
+
+    ' Decide on the target state of affected document based on the state of the Doc Change
+    ' NOTE: toState_affected_doc must define valid life cycle states of the document
+    Select Case change_lcTransition
+        Case "In Work,In Review" 
+           toState_affected_doc = "In Review"
+        Case "In Review,Closed" 
+           toState_affected_doc = "Released"
+        Case "In Review,In Work" 
+           toState_affected_doc = "Draft"
+        Case Else
+           toState_affected_doc = ""
+    End Select
+
+    If (toState_affected_doc = "") Then
+        ' no promotions to be done, just return
+        Return Me
+    End If
+
+    ' Make sure the item is not already in the target state before promoting
+    Dim thisState As String = thisItem.getProperty("state")
+    If (thisState <> toState_affected_doc And thisState <> "Released") Then
+
+      ' now promote the affected document's state
+      thisItem.setAction("promoteItem")
+      thisItem.setProperty("state",toState_affected_doc)
+      thisItem = thisItem.apply()
+      If (thisItem.isError()) Then
+        thisErr = innovator.newError("Error promoting affected Document: " & thisItem.getErrorDetail())
+        Return thisErr
+      End If
+    End If
+  End If
+
+  Dim thisAction As String = thisAffItem.getProperty("action")
+
+  ' If the affected document is replacing another document, promote it to "Superseded" state
+
+  ' Get the affected item
+  If (replacedId <> Nothing) Then 
+      qry = Me.newItem("Document","get")
+      qry.setId(replacedId)
+      Dim thisItem As Aras.IOM.Item = qry.apply()
+      If (thisItem.isError()) Then
+        thisErr = innovator.newError("Error getting replaced Document: " & thisItem.getErrorDetail())
+        Return thisErr
+      End If
+
+      ' look at current state of replaced document
+      Dim curState As String = thisItem.getProperty("state")
+
+      If (curState = "In Change" Or curState = "Released" )
+        thisItem.setProperty("state","Superseded")
+        thisItem.setAction("promoteItem")
+        thisItem = thisItem.apply()
+        If (thisItem.isError()) Then
+          thisErr = innovator.newError("Error promoting replaced Item: " & thisItem.getErrorDetail())
+          Return thisErr
+        End If
+      End If
+ 
+  End If
+Next
+If (PermissionWasSet=True)	Then
+	Aras.Server.Security.Permissions.RevokeIdentity(plmIdentity)
+End If
+]]></method_code>
+  <method_type>VB</method_type>
+  <name>Affected Doc Promotion</name>
+ </Item>
+</AML>

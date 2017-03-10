@@ -1,0 +1,10 @@
+﻿<AML>
+ <Item type="Sequence" id="F2EF3037853E40DFA2E977C8E11A2C20" action="add">
+  <current_value>189</current_value>
+  <name>DocChange Numbers</name>
+  <pad_to>8</pad_to>
+  <pad_with>0</pad_with>
+  <prefix>DCO-</prefix>
+  <step>1</step>
+ </Item>
+</AML>
